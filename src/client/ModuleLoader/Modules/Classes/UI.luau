@@ -32,6 +32,10 @@ function class:Init()
 	self.UI.Parent = game.Players.LocalPlayer.PlayerGui:FindFirstChild(self.Parent, true)
 end
 
+function class:Destroy()
+	
+end
+
 ------------------------------ GENERAL METHODS ------------------------------
 
 function class:Open()
