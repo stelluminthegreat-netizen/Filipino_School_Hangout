@@ -14,6 +14,7 @@ end
 
 function Table.DeepClean(table: table)
 	for index, value in table do
+		task.wait()
 		if type(value) == "table" then
 			Table.DeepClean(value)
 		end

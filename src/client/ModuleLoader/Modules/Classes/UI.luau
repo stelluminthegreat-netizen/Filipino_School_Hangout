@@ -30,10 +30,16 @@ function class:Init()
 		end
 	end
 	self.UI.Parent = game.Players.LocalPlayer.PlayerGui:FindFirstChild(self.Parent, true)
+	local UI_ObjParent = class.UIs[self.Parent]
+	if UI_ObjParent then UI_ObjParent.Children[self.UI.Name] = self end
 end
 
 function class:Destroy()
-
+	for _, connection in self.Connections do
+		connection:Disconnect()
+	end
+	self.UI:Destroy()
+	Table.DeepClean(self)
 end
 
 ------------------------------ GENERAL METHODS ------------------------------
@@ -46,6 +52,13 @@ function class:Open()
 	end)
 end
 
+function class:Close()
+	local eventName = "MouseButton1Down"
+	self.Events[eventName] = self.UI.MouseButton1Down
+	self.Connections[eventName] = self.Events[eventName]:Connect(function()
+		Close(self)
+	end)
+end
 
 ------------------------------ PRIVATE FUNCTIONS ------------------------------
 function Open(UI_Obj)
@@ -74,11 +87,35 @@ function Open(UI_Obj)
 	end
 end 
 
+function Close(UI_Obj)
+	-- Loop through self.CloseUIs
+	-- Find each UI in class.UIs
+	-- Fire their Closed events
+	for _, uiName in UI_Obj.CloseUIs do
+		local ui = class.UIs[uiName]
+		if not ui then continue end
+		ui.Events.Closed:Fire()
+		task.wait()
+	end
+end
+
 ------------------------------ EVENT HANDLERS ------------------------------
 function  class:Opened()
 	task.wait(self.Delay)
 	local animEvent = self.Events.Animate
 	if animEvent then animEvent:Fire(self.Changes.OpenChanges) end
+end
+
+function class:Closed()
+	task.wait(self.Delay)
+	if self.Children then
+		for _, child in self.Children do child.Events.Closed:Fire() end
+	end
+	self:Destroy() 
+	return 
+	-- if not self.Events.Animate then 
+	-- end
+
 end
 
 function  class:Animate(changes: table)

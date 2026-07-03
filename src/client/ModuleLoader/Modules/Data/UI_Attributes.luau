@@ -6,8 +6,14 @@ return {
             [2] = "PromptFrame1",
             [3] = "PromptFrame2"
         },
+        ["CloseUIs"] = {
+            [1] = "PromptFrame",
+            [2] = "PromptFrame1",
+            [3] = "PromptFrame2"
+        },
         ["Funcs"] = {
-            [1] = "Open"
+            [1] = "Open",
+            [2] = "Close"
         },
         ["EventNames"] = {
             ["Opened"] = "Opened"
@@ -30,6 +36,7 @@ return {
    ["PromptFrame"] = {
         ["EventNames"] = {
             ["Opened"] = "Opened",
+            ["Closed"] = "Closed",
             ["Animate"] = "Animate"
         },
         ["Events"] = {
@@ -54,6 +61,9 @@ return {
 
             }
         },
+        ["Children"] = {
+
+        },
         ["Parent"] = "ScreenGui",
         ["AnimDuration"] = 0.5
    },
@@ -61,6 +71,7 @@ return {
    ["PromptFrame1"] = {
         ["EventNames"] = {
             ["Opened"] = "Opened",
+            ["Closed"] = "Closed",
             ["Animate"] = "Animate"
         },
         ["Events"] = {
@@ -85,6 +96,9 @@ return {
 
             }
         },
+        ["Children"] = {
+
+        },
         ["Parent"] = "ScreenGui",
         ["AnimDuration"] = 1
    },
@@ -92,6 +106,7 @@ return {
    ["PromptFrame2"] = {
         ["EventNames"] = {
             ["Opened"] = "Opened",
+            ["Closed"] = "Closed",
             ["Animate"] = "Animate"
         },
         ["Events"] = {
@@ -116,9 +131,29 @@ return {
 
             }
         },
+        ["Children"] = {
+
+        },
         ["Parent"] = "ScreenGui",
         ["AnimDuration"] = 1.5
    },
+   ["TestChild1"] = {
+        ["EventNames"] = {
+            ["Opened"] = "Opened",
+            ["Closed"] = "Closed",
+        },
+        ["Events"] = {
+
+        },
+        ["Connections"] = {
+
+        },
+        ["Prios"] = {
+            ["OpenPrio"] = 2,
+            ["ClosePrio"] = 1
+        },
+        ["Parent"] = "PromptFrame"
+   }
    
 
 }
