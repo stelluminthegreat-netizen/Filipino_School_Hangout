@@ -3,11 +3,11 @@ class.UIs = {}
 local UI_Attributes = require(script.Parent.Parent.Data.UI_Attributes)
 local UIsPath = game.ReplicatedStorage.UIs
 local customTween = require(game.ReplicatedStorage.Shared.Libraries.CustomTween)
-local deepCopyTable = require(game.ReplicatedStorage.Shared.Libraries.DeepCopyTable)
+local Table = require(game.ReplicatedStorage.Shared.Libraries.Table)
 class.__index = class
 
 function class.new(UI: ui, rootUI: string)
-	local self = setmetatable(deepCopyTable.DeepClone(UI_Attributes[UI.Name]), class)
+	local self = setmetatable(Table.DeepClone(UI_Attributes[UI.Name]), class)
 	self.UI = UI:Clone()
 	class.UIs[self.UI.Name] = self
 	self.RootUI = class.UIs[rootUI]
@@ -33,7 +33,7 @@ function class:Init()
 end
 
 function class:Destroy()
-	
+
 end
 
 ------------------------------ GENERAL METHODS ------------------------------

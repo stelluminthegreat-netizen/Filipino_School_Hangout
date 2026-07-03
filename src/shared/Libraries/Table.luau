@@ -1,0 +1,23 @@
+local Table = {}
+
+function Table.DeepClone(original)
+	local clone = table.clone(original) 
+
+	for key, value in original do
+		if type(value) == "table" then
+			clone[key] = Table.DeepClone(value)
+		end
+	end
+
+	return clone
+end
+
+function Table.DeepClean(table: table)
+	for index, value in table do
+		if type(value) == "table" then
+			Table.DeepClean(value)
+		end
+		table[index] = nil
+	end
+end
+return Table
