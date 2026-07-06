@@ -71,7 +71,7 @@ function Open(UI_Obj)
 		if not folder then continue end
 		UI_Obj.TargetFolders[folderName] = folder
 	end
-	for _, folder in UI_Obj.TargetFolders do if class.UIs[folder.Name] then return end end-- Check before opening
+	for _, folder in UI_Obj.TargetFolders do if class.UIs[folder.Name] then return end end -- !! NEVER REMOVE !! Check before opening 
 	for _, folder in UI_Obj.TargetFolders do
 		if class.UIs[folder.Name] then return end
 		local Prios = {}
@@ -114,6 +114,7 @@ function  class:Opened()
 	if self.Debounce.Opened == true then return end
 	self.Debounce.Opened = true
 	task.wait(self.Delay)
+	if self.Delays then task.wait(self.Delays.Open) end
 	local animEvent = self.Events.Animate
 	if animEvent then animEvent:Fire(self.Changes.OpenChanges) end
 end
@@ -122,6 +123,7 @@ function class:Closed()
 	if self.Debounce.Closed == true then return end
 	self.Debounce.Closed = true
 	task.wait(self.Delay or 0)
+	if self.Delays then task.wait(self.Delays.Close) end
 	if not self.Events.Animate then 
 		if self.Children then
 			for _, child in self.Children do child.Events.Closed:Fire() end

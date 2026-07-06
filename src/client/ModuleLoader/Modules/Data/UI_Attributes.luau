@@ -71,6 +71,10 @@ return {
         ["Children"] = {
 
         },
+        ["Delays"] = {
+            ["Open"] = 0,
+            ["Close"] = 0
+        }, 
         ["Parent"] = "ScreenGui",
         ["AnimDuration"] = 0.5,
    },
@@ -95,6 +99,10 @@ return {
             ["OrigPos"] = UDim2.fromScale(0.5, -1),
             ["TargetPos"] = UDim2.fromScale(0.5, .5)
         },
+        ["Delays"] = {
+            ["Open"] = 0.1,
+            ["Close"] = 0.1
+        }, 
         ["Debounce"] = {
             ["Openend"] = false,
             ["Closed"] = false
@@ -134,6 +142,10 @@ return {
             ["OpenPrio"] = 1,
             ["ClosePrio"] = 2
         },
+        ["Delays"] = {
+            ["Open"] = 0.2,
+            ["Close"] = 0.2
+        }, 
         ["Positions"] = {
             ["OrigPos"] = UDim2.fromScale(0.5, -1),
             ["TargetPos"] = UDim2.fromScale(0.65, .5)
