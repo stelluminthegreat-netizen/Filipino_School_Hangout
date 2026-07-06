@@ -18,6 +18,9 @@ return {
         ["EventNames"] = {
             ["Opened"] = "Opened"
         },
+        ["Debounce"] = {
+            ["Status"] = "Opening"
+        },
         ["Events"] = {
 
         },
@@ -53,19 +56,23 @@ return {
             ["OrigPos"] = UDim2.fromScale(0.5, -1),
             ["TargetPos"] = UDim2.fromScale(0.35, .5)
         },
+        ["Debounce"] = {
+            ["Openend"] = false,
+            ["Closed"] = false
+        },
         ["Changes"] = {
             ["OpenChanges"] = {
                 ["Position"] = UDim2.fromScale(0.35, 0.5)
             },
             ["CloseChanges"] = {
-
+                ["Position"] = UDim2.fromScale(0.35, 1.5)
             }
         },
         ["Children"] = {
 
         },
         ["Parent"] = "ScreenGui",
-        ["AnimDuration"] = 0.5
+        ["AnimDuration"] = 0.5,
    },
       
    ["PromptFrame1"] = {
@@ -88,19 +95,23 @@ return {
             ["OrigPos"] = UDim2.fromScale(0.5, -1),
             ["TargetPos"] = UDim2.fromScale(0.5, .5)
         },
+        ["Debounce"] = {
+            ["Openend"] = false,
+            ["Closed"] = false
+        },
         ["Changes"] = {
             ["OpenChanges"] = {
                 ["Position"] = UDim2.fromScale(0.5, 0.5)
             },
             ["CloseChanges"] = {
-
+                ["Position"] = UDim2.fromScale(0.5, 1.5)
             }
         },
         ["Children"] = {
 
         },
         ["Parent"] = "ScreenGui",
-        ["AnimDuration"] = 1
+        ["AnimDuration"] = 0.5
    },
       
    ["PromptFrame2"] = {
@@ -115,6 +126,10 @@ return {
         ["Connections"] = {
 
         },
+        ["Debounce"] = {
+            ["Openend"] = false,
+            ["Closed"] = false
+        },
         ["Prios"] = {
             ["OpenPrio"] = 1,
             ["ClosePrio"] = 2
@@ -128,14 +143,14 @@ return {
                 ["Position"] = UDim2.fromScale(0.65, 0.5)
             },
             ["CloseChanges"] = {
-
+                ["Position"] = UDim2.fromScale(0.65, 1.5)
             }
         },
         ["Children"] = {
 
         },
         ["Parent"] = "ScreenGui",
-        ["AnimDuration"] = 1.5
+        ["AnimDuration"] = 0.5
    },
    ["TestChild1"] = {
         ["EventNames"] = {
@@ -152,7 +167,11 @@ return {
             ["OpenPrio"] = 2,
             ["ClosePrio"] = 1
         },
-        ["Parent"] = "PromptFrame"
+        ["Debounce"] = {
+            ["Opened"] = false,
+            ["Closed"] = false
+        },
+        ["Parent"] = "PromptFrame",
    }
    
 
