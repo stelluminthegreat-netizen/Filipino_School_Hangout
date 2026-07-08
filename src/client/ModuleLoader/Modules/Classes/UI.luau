@@ -16,6 +16,29 @@ function class.new(UI: ui, rootUI: string)
 	return self
 end
 
+function class.OpenInitialUIs(UIs: table)
+	for _, folder in UIs do if class.UIs[folder.Name] then return end end -- !! NEVER REMOVE !! Check before opening 
+	for _, folder in UIs do
+		if class.UIs[folder.Name] then return end
+		local Prios = {}
+		for _, childUI in folder:GetChildren() do
+			if class.UIs[childUI.Name] then return end
+			local attributes = require(UI_Attributes[childUI.Name])
+			local PrioNum = attributes.Prios.OpenPrio
+			if not Prios[PrioNum] then Prios[PrioNum] = {} end
+			Prios[PrioNum][childUI.Name] = childUI
+		end
+		for _, prio in Prios do
+			for _, ui in prio do
+				local newUI = class.new(ui, folder:GetAttribute("RootUI"))
+				newUI.Delay = folder:GetAttribute("Delay")
+				newUI.Events.Opened:Fire()
+			end
+		end
+	end
+	task.wait(0.5)
+end
+
 function class:Init()
 	-- Reposition UIs to their closed position
 	if self.Changes then 
@@ -92,6 +115,7 @@ function Open(UI_Obj)
 			for _, ui in prio do
 				local newUI = class.new(ui, folder:GetAttribute("RootUI"))
 				newUI.Events.Opened:Fire()
+				newUI.Delay = folder:GetAttribute("Delay")
 			end
 		end
 	end
