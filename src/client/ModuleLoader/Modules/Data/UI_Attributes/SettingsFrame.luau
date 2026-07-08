@@ -7,8 +7,8 @@ return
     },
     ["Changes"] = {
         ["CloseChanges"] = {
-            ["Position"] = UDim2.new(-1, 0.75)
-        },
+            ["Position"] = UDim2.fromScale(-1, 0.75)
+        }, 
         ["OpenChanges"] = {
             ["Position"] = UDim2.fromScale(0.05, 0.75)
         }

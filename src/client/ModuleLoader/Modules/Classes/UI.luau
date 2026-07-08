@@ -1,14 +1,14 @@
 local TextService = game:GetService("TextService")
 local class = {}
 class.UIs = {}
-local UI_Attributes = require(script.Parent.Parent.Data.UI_Attributes)
+local UI_Attributes = script.Parent.Parent.Data.UI_Attributes
 local UIsPath = game.ReplicatedStorage.UI_Folders
 local customTween = require(game.ReplicatedStorage.Shared.Libraries.CustomTween)
 local Table = require(game.ReplicatedStorage.Shared.Libraries.Table)
 class.__index = class
 
 function class.new(UI: ui, rootUI: string)
-	local self = setmetatable(Table.DeepClone(UI_Attributes[UI.Name]), class)
+	local self = setmetatable(Table.DeepClone(require(UI_Attributes[UI.Name])), class)
 	self.UI = UI:Clone()
 	class.UIs[self.UI.Name] = self
 	self.RootUI = class.UIs[rootUI]
@@ -104,7 +104,6 @@ function Close(UI_Obj)
 	-- Find each UI in class.UIs
 	-- Fire their Closed events
 	if UI_Obj.Debounce.Status ~= "Closing" then return end
-	print(UI_Obj.Debounce.Status)
 	for _, uiName in UI_Obj.CloseUIs do
 		local ui = class.UIs[uiName]
 		if not ui then continue end
@@ -121,7 +120,6 @@ function  class:Opened()
 	task.wait(self.Delay)
 	if self.Delays then task.wait(self.Delays.Open) end
 	local animEvent = self.Events.Animate
-	print(self.UI.Name, self.Events, self.EventNames)
 	if animEvent then animEvent:Fire(self.Changes.OpenChanges) end
 end
 
@@ -137,6 +135,7 @@ function class:Closed()
 		self:Destroy()
 		return
 	end
+	if self.UI.Name == "SettingsFrame" then warn(self) end
 	self.Events.Animate:Fire(self.Changes.CloseChanges)
 	self.Events.AnimCompleted:Wait()
 	if self.Children then
@@ -147,7 +146,7 @@ function class:Closed()
 end
 
 function  class:Animate(changes: table)
-	print(self.UI.Name)
+	if self.UI.Name == "SettingsFrame" then print(require(UI_Attributes.SettingsFrame)) end
 	local tween = customTween.ApplyProperties(self.UI, changes, self.AnimDuration)
 	self.Events["AnimCompleted"] = tween.Completed
 	return tween
