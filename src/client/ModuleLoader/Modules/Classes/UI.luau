@@ -2,7 +2,7 @@ local TextService = game:GetService("TextService")
 local class = {}
 class.UIs = {}
 local UI_Attributes = require(script.Parent.Parent.Data.UI_Attributes)
-local UIsPath = game.ReplicatedStorage.UIs
+local UIsPath = game.ReplicatedStorage.UI_Folders
 local customTween = require(game.ReplicatedStorage.Shared.Libraries.CustomTween)
 local Table = require(game.ReplicatedStorage.Shared.Libraries.Table)
 class.__index = class
@@ -17,6 +17,10 @@ function class.new(UI: ui, rootUI: string)
 end
 
 function class:Init()
+	-- Reposition UIs to their closed position
+	if self.Changes then 
+		self:Animate(self.Changes.CloseChanges)
+	end
 	if self.EventNames then
 		for _, eventName in self.EventNames do
 			self.Events[eventName] = shared.Event.new()
@@ -33,6 +37,7 @@ function class:Init()
 	self.UI.Parent = game.Players.LocalPlayer.PlayerGui:FindFirstChild(self.Parent, true)
 	local UI_ObjParent = class.UIs[self.Parent]
 	if UI_ObjParent then UI_ObjParent.Children[self.UI.Name] = self  end
+	self.Events.Opened:Fire()
 end
 
 function class:Destroy()
@@ -116,6 +121,7 @@ function  class:Opened()
 	task.wait(self.Delay)
 	if self.Delays then task.wait(self.Delays.Open) end
 	local animEvent = self.Events.Animate
+	print(self.UI.Name, self.Events, self.EventNames)
 	if animEvent then animEvent:Fire(self.Changes.OpenChanges) end
 end
 
@@ -141,6 +147,7 @@ function class:Closed()
 end
 
 function  class:Animate(changes: table)
+	print(self.UI.Name)
 	local tween = customTween.ApplyProperties(self.UI, changes, self.AnimDuration)
 	self.Events["AnimCompleted"] = tween.Completed
 	return tween

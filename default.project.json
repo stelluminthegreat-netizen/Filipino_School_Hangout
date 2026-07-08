@@ -1,7 +1,7 @@
 {
-  "name": "Tick_Integrated_Template",
+  "name": "Filipino Hangout [TESTING GROUNDS]",
   "servePort": 8000,
-  "servePlaceIds": [104857121564577],
+  "servePlaceIds": [87489953880320],
   "tree": {
     "$className": "DataModel",
 
