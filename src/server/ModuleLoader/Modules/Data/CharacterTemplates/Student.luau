@@ -19,4 +19,7 @@ return {
     ["FuncNames"] = {
         [1] = "DestroyUponDeath"
     },
+    ["Connections"] = {
+
+    },
 }
