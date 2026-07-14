@@ -42,6 +42,7 @@ function class:DestroyUponDeath()
 end
 
 function class:Destroy()
+	self.Events.Destroyed:Fire()
 	for _, connection in self.Connections do
 		connection:Disconnect()
 	end
