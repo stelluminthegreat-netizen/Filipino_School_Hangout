@@ -34,7 +34,7 @@ end
 function class:DestroyUponDeath()
 	local connection
 	connection = self.Character.Humanoid.Changed:Connect(function()
-		self.Connections[connection] = connection
+		if not self.Connections[connection] then self.Connections[connection] = connection end
 		local humanoid = self.Character.Humanoid
 		if self.Status.Destroying == true then return end
 		if humanoid.Health <=0 then self.Status.Destroying = true self:Destroy() end
