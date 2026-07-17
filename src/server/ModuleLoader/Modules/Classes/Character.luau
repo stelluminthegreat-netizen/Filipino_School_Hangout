@@ -5,7 +5,7 @@ local class = {}
 class.__index = class
 
 function class.new(className: string, character: model)
-	local self = setmetatable(require(Table.DeepClone(Templates[className])), class)
+	local self = setmetatable(Table.DeepClone(require(Templates[className])), class)
 	self.Character = character
 	self:Init()
 	return self

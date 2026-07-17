@@ -1,7 +1,7 @@
 local Table = {}
 
 function Table.DeepClone(original)
-	local clone = table.clone(original) 
+	local clone = table.clone(original)  
 
 	for key, value in original do
 		if type(value) == "table" then
