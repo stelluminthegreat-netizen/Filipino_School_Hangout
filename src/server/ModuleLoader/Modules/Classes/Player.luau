@@ -17,7 +17,7 @@ function class.new(plr)
 	self.Player = plr
 	self.Name = plr.Name
 	class.Players[self.Name] = self
-	self:Init()
+	shared.Threads:Spawn(function() self:Init() end)
 
 	return self
 end
