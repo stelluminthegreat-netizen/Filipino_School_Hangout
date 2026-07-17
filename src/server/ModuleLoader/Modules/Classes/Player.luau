@@ -25,6 +25,7 @@ end
 function class:Init()
 	self.Data = DataManager.profiles[self.Player]
 	self.ClassName = "Student"
+	self.Character = shared.Character.new(self.ClassName, self.Player.Character)
 	-- INITIALIZE EVENTS
 	for _, name in self.EventNames do
 		local event = shared.Event.new()
@@ -54,9 +55,8 @@ end
 
 function class:CharacterDestroyed()
 	if self.Connections.CharacterDestroyed then self.Connections.CharacterDestroyed:Disconnect() end
-	self.Character = shared.Character.new(self.ClassName, self.Player.Character or self.Player.CharacterAdded:Wait())
+	self.Character = shared.Character.new(self.ClassName, self.Player.CharacterAdded:Wait())
 	self.Connections.CharacterDestroyed = self.Character.Events.Destroyed:Connect(function() self:CharacterDestroyed() end)
-	print("Character destroyed.", self)
 end
 
 return class
