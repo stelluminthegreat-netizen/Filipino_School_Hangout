@@ -5,12 +5,14 @@ return
         [2] = "MainMenuHeader",
         [3] = "MainMenuBackground",
         [4] = "PlayGameFrame",
-        [5] = "ServersFrame",
-        [6] = "SettingsFrame",
-        [7] = "RoleSelectorContainer"
+        [5] = "ServersBtnFrame",
+        [6] = "SettingsBtnFrame",
+        [7] = "RoleSelectorContainer",
+        [8] = "Overlay"
     },
     ["Funcs"] = {
-        [1] = "Close"
+        [1] = "Close",
+        [2] = "OnPlayClicked"
     },
     ["EventNames"] = {
         ["Closed"] = "Closed",

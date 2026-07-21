@@ -17,6 +17,7 @@ function class.new(UI: ui, rootUI: string)
 end
 
 function class.OpenInitialUIs(UIs: table)
+	task.wait(0.5)
 	for _, folder in UIs do if class.UIs[folder.Name] then return end end -- !! NEVER REMOVE !! Check before opening 
 	for _, folder in UIs do
 		if class.UIs[folder.Name] then return end
@@ -54,7 +55,7 @@ function class:Init()
 		for _, funcName in self.Funcs do
 			local func = self[funcName]
 			if not func then continue end
-			func(self)
+			shared.Threads:Spawn(function() func(self) end)
 		end
 	end
 	self.UI.Parent = game.Players.LocalPlayer.PlayerGui:FindFirstChild(self.Parent, true)
@@ -159,7 +160,6 @@ function class:Closed()
 		self:Destroy()
 		return
 	end
-	if self.UI.Name == "SettingsFrame" then warn(self) end
 	self.Events.Animate:Fire(self.Changes.CloseChanges)
 	self.Events.AnimCompleted:Wait()
 	if self.Children then
@@ -167,6 +167,17 @@ function class:Closed()
 	end
 	self:Destroy() 
 	return 
+end
+
+function class:OnPlayClicked()
+	if self.Connections.OnPlayClicked then warn("OnPlayClicked connection exists", self.Connections) return end
+	local conn 
+	conn = self.UI.MouseButton1Down:Connect(function()
+		if not self.Connections.OnPlayClicked then self.Connections["OnPlayClicked"] = conn end
+		local event = game.ReplicatedStorage.Remotes.Events.PlayBtnClicked
+		event:FireServer()
+		conn:Disconnect()
+	end)
 end
 
 function  class:Animate(changes: table)

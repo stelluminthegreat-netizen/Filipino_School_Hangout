@@ -26,6 +26,7 @@ function class:Init()
 	self.Data = DataManager.profiles[self.Player]
 	self.ClassName = "Student"
 	self.Character = shared.Character.new(self.ClassName, self.Player.Character)
+	self.Character.Player = self
 	-- INITIALIZE EVENTS
 	for _, name in self.EventNames do
 		local event = shared.Event.new()
@@ -35,7 +36,7 @@ function class:Init()
 	-- INITIALIZE FUNCS
 	for _, name in self.FuncNames do
 		if not self[name] then continue end
-		self[name](self)
+		shared.Threads:Spawn(function() self[name](self) end)
 	end
 end
 
@@ -56,7 +57,27 @@ end
 function class:CharacterDestroyed()
 	if self.Connections.CharacterDestroyed then self.Connections.CharacterDestroyed:Disconnect() end
 	self.Character = shared.Character.new(self.ClassName, self.Player.CharacterAdded:Wait())
+	self.Character.Player = self
 	self.Connections.CharacterDestroyed = self.Character.Events.Destroyed:Connect(function() self:CharacterDestroyed() end)
+end
+
+function class:OnPlayGameClicked()
+	local event = game.ReplicatedStorage.Remotes.Events.PlayBtnClicked
+	local conn
+	conn = event.OnServerEvent:Connect(function(player)
+		if not self.Connections.OnPlayGameClicked then self.Connections["OnPlayGameClicked"] = conn end
+		if self.Player ~= player then return end
+		if self.Status.Killing == true then return end
+		self.Status.Killing = true
+		self.Character:Kill()
+		self:SetSpawn(CFrame.new(Vector3.new(0, 50, 0)))
+	end)
+end
+
+----------------------------------- APIs -----------------------------------
+
+function class:SetSpawn(cFrame: CFrame)
+	self.SpawnPoint = cFrame
 end
 
 return class

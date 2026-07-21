@@ -7,7 +7,7 @@ class.__index = class
 function class.new(className: string, character: model)
 	local self = setmetatable(Table.DeepClone(require(Templates[className])), class)
 	self.Character = character
-	self:Init()
+	shared.Threads:Spawn(function() self:Init() end)
 	return self
 end
 
@@ -24,11 +24,28 @@ function class:Init()
 		if not self[name] then continue end
 		self[name](self)
 	end
+	self:WaitForPlayer()
+	self:Teleport(self.Player.SpawnPoint)
 end
 
 function class:IncrementHealth(value: number)
 	local humanoid = self.Character.Humanoid
 	humanoid.Health += value
+end
+
+function class:Teleport(cFrame: CFrame)
+	self.Character:SetPrimaryPartCFrame(cFrame)
+end
+
+function class:WaitForPlayer()
+	while not self.Player do
+		task.wait()
+	end
+end
+
+function class:Kill()
+	local humanoid = self.Character.Humanoid
+	humanoid.Health -= humanoid.Health
 end
 
 function class:DestroyUponDeath()
