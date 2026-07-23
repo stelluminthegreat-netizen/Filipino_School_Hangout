@@ -5,6 +5,7 @@ function self.initialize()
 end
 
 function self.start()
+    shared.Player.new(game.Players.LocalPlayer)
 	StartMinorTasksHandler()
     StartDataManager()
     InitializeUI()

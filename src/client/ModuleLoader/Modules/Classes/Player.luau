@@ -1,0 +1,52 @@
+local TemplatePath = script.Parent.Parent.Data.Player.PlayerTemplate
+local Table = require(game.ReplicatedStorage.Shared.Libraries.Table)
+
+local class = {}
+class.__index = class
+class.Players = {}
+
+function class.new(plr)
+	local self = setmetatable(Table.DeepClone(require(TemplatePath)), class)
+	self.Player = plr
+	class.Players[plr.Name] = self
+	print(class.Players)
+	shared.Threads:Spawn(function() self:Init() end)
+	return self
+end
+
+function class:Init()
+	for _, name in self.EventNames do
+		local event = shared.Event.new()
+		self.Events[name] = event
+	end
+	
+	for _, name in self.Funcs do
+		if not self[name] then continue end
+		self[name](self)
+	end
+end
+
+function class:GameStateListener()
+	local conn
+	conn = self.Events.Changed:Connect(function()
+		local conns = self.Connections
+		if not conns["GameStateListener"] then conns["GameStateListener"] = conn end
+		if self.Status.InMainMenu == true then
+			self:OnInMainMenu()
+		elseif self.Status.InMainMenu == false then
+			self:OnInGame()
+		end
+	end)
+end
+
+function class:OnInMainMenu()
+	local OnInMainMenu = game.ReplicatedStorage.Remotes.Events.OnInMainMenu
+	OnInMainMenu:FireServer()
+end
+
+function class:OnInGame()
+	local OnInGame = game.ReplicatedStorage.Remotes.Events.OnInGame
+	OnInGame:FireServer()
+end
+
+return class

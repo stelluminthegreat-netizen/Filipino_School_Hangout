@@ -189,6 +189,11 @@ function class:OnPlayClicked()
 		tween.Completed:Wait()
 		cam.CameraType = Enum.CameraType.Custom
 		cam.CameraSubject = HRP
+
+		local Player = shared.Player
+		local playerObj = Player.Players[player.Name]
+		playerObj.Status.InMainMenu = false
+		playerObj.Events.Changed:Fire()
 		conn:Disconnect()
 	end)
 end
