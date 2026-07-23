@@ -5,6 +5,7 @@ local UI_Attributes = script.Parent.Parent.Data.UI_Attributes
 local UIsPath = game.ReplicatedStorage.UI_Folders
 local customTween = require(game.ReplicatedStorage.Shared.Libraries.CustomTween)
 local Table = require(game.ReplicatedStorage.Shared.Libraries.Table)
+local Camera = require(game.ReplicatedStorage.Shared.Libraries.Camera)
 class.__index = class
 
 function class.new(UI: ui, rootUI: string)
@@ -176,6 +177,18 @@ function class:OnPlayClicked()
 		if not self.Connections.OnPlayClicked then self.Connections["OnPlayClicked"] = conn end
 		local event = game.ReplicatedStorage.Remotes.Events.PlayBtnClicked
 		event:FireServer()
+
+		local player = game.Players.LocalPlayer
+		player.CharacterAdded:Wait()
+		local HRP = player.Character:WaitForChild("HumanoidRootPart")
+		local cam = workspace.CurrentCamera
+		task.wait(2)
+		local at = HRP.Position + Vector3.new(0, 3, 10)
+		local lookAt = HRP.Position
+		local tween = Camera.TweenedCFrameModification(cam, CFrame.lookAt(at, lookAt), 2)
+		tween.Completed:Wait()
+		cam.CameraType = Enum.CameraType.Custom
+		cam.CameraSubject = HRP
 		conn:Disconnect()
 	end)
 end

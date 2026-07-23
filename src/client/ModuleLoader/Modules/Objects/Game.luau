@@ -8,6 +8,7 @@ function self.start()
 	StartMinorTasksHandler()
     StartDataManager()
     InitializeUI()
+    InitCam()
 end
 
 function StartMinorTasksHandler()
@@ -40,6 +41,15 @@ function InitializeUI()
     end
     game.Players.LocalPlayer.CharacterAdded:Wait()
     shared.UI.OpenInitialUIs(targetUIs)
+end
+
+function InitCam()
+    local cam = game.Workspace.CurrentCamera
+    local lookAt = Vector3.new(10, 40, 0)
+    local at = Vector3.new(0, 50, 0)
+
+    cam.CameraType = Enum.CameraType.Scriptable
+    cam.CFrame = CFrame.lookAt(at, lookAt)
 end
 
 return self
