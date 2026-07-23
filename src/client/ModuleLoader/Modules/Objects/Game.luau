@@ -46,8 +46,8 @@ end
 
 function InitCam()
     local cam = game.Workspace.CurrentCamera
-    local lookAt = Vector3.new(10, 40, 0)
-    local at = Vector3.new(0, 50, 0)
+    local lookAt = Vector3.new(0, 20, 0)
+    local at = Vector3.new(0, 30, 0)
 
     cam.CameraType = Enum.CameraType.Scriptable
     cam.CFrame = CFrame.lookAt(at, lookAt)

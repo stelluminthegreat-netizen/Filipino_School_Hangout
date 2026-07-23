@@ -193,7 +193,7 @@ function class:OnPlayClicked()
 		local Player = shared.Player
 		local playerObj = Player.Players[player.Name]
 		playerObj.Status.InMainMenu = false
-		playerObj.Events.Changed:Fire()
+		playerObj.Events.Changed:Fire("GameState")
 		conn:Disconnect()
 	end)
 end

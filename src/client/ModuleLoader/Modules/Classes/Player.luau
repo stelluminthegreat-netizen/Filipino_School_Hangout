@@ -9,7 +9,6 @@ function class.new(plr)
 	local self = setmetatable(Table.DeepClone(require(TemplatePath)), class)
 	self.Player = plr
 	class.Players[plr.Name] = self
-	print(class.Players)
 	shared.Threads:Spawn(function() self:Init() end)
 	return self
 end
@@ -28,25 +27,14 @@ end
 
 function class:GameStateListener()
 	local conn
-	conn = self.Events.Changed:Connect(function()
+	conn = self.Events.Changed:Connect(function(params, changes)
 		local conns = self.Connections
 		if not conns["GameStateListener"] then conns["GameStateListener"] = conn end
-		if self.Status.InMainMenu == true then
-			self:OnInMainMenu()
-		elseif self.Status.InMainMenu == false then
-			self:OnInGame()
-		end
+		if changes ~= "GameState" then print(changes) return end
+		local GameStateChanged = game.ReplicatedStorage.Remotes.Events.GameStateChanged
+		GameStateChanged:FireServer()
 	end)
 end
 
-function class:OnInMainMenu()
-	local OnInMainMenu = game.ReplicatedStorage.Remotes.Events.OnInMainMenu
-	OnInMainMenu:FireServer()
-end
-
-function class:OnInGame()
-	local OnInGame = game.ReplicatedStorage.Remotes.Events.OnInGame
-	OnInGame:FireServer()
-end
 
 return class

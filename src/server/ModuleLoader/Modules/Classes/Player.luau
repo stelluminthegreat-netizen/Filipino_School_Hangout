@@ -70,7 +70,25 @@ function class:OnPlayGameClicked()
 		if self.Status.Killing == true then return end
 		self.Status.Killing = true
 		self.Character:Kill()
-		self:SetSpawn(CFrame.new(Vector3.new(0, 50, 0)))
+		self:SetSpawn(CFrame.new(Vector3.new(-5, 15, 0)))
+	end)
+end
+
+function class:OnGameStateChanged()
+	local GameStateChanged = game.ReplicatedStorage.Remotes.Events.GameStateChanged
+	local conn
+	conn = GameStateChanged.OnServerEvent:Connect(function(plr)
+		local conns = self.Connections
+		if not conns["GameStateListener"] then conns["GameStateListener"] = conn end
+		if plr ~= self.Player then return end
+
+		if self.Status.InGameState == "InMainMenu" then
+			self.Status.InGameState = "InGame"
+			self:SetSpawn(CFrame.new(Vector3.new(-5, 10.5, 0)))
+		elseif self.Status.InGameState == "InGame" then
+			self.Status.InGameState = "InMainMenu"
+			self:SetSpawn(CFrame.new(Vector3.new(5, 10.5, 0)))
+		end
 	end)
 end
 
