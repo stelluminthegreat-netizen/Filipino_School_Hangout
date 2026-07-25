@@ -61,20 +61,6 @@ function class:CharacterDestroyed()
 	self.Connections.CharacterDestroyed = self.Character.Events.Destroyed:Connect(function() self:CharacterDestroyed() end)
 end
 
--- function class:OnPlayGameClicked()
--- 	local event = game.ReplicatedStorage.Remotes.Events.PlayBtnClicked
--- 	local conn
--- 	conn = event.OnServerEvent:Connect(function(player)
--- 		if not self.Connections.OnPlayGameClicked then self.Connections["OnPlayGameClicked"] = conn end
--- 		if self.Player ~= player then return end
--- 		if self.Status.Killing == true then return end
--- 		self.Status.Killing = true
--- 		self.Character:Kill()
--- 		self:SetSpawn(CFrame.new(Vector3.new(-5, 15, 0)))
--- 		self.Status.Killing = false
--- 	end)
--- end
-
 function class:OnGameStateChanged()
 	local GameStateChanged = game.ReplicatedStorage.Remotes.Events.GameStateChanged
 	local conn
@@ -85,12 +71,12 @@ function class:OnGameStateChanged()
 
 		if self.Status.GameState == "InMainMenu" then
 			self.Status.GameState = "InGame"
-			self:SetSpawn(CFrame.new(Vector3.new(-5, 10.5, 0)))
+			self:SetSpawn(CFrame.new(Vector3.new(-5, 15, 0)))
 			self.Character:Kill()
 		elseif self.Status.GameState == "InGame" then
 			self.Status.GameState = "InMainMenu"
 			self.Character:Kill()
-			self:SetSpawn(CFrame.new(Vector3.new(5, 10.5, 0)))
+			self:SetSpawn(CFrame.new(Vector3.new(5, 15, 0)))
 		end
 		print("Game state:", self.Status.GameState)
 	end)

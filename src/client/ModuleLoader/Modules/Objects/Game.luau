@@ -1,7 +1,6 @@
 local self = {}
 
 function self.initialize()
-	
 end
 
 function self.start()
@@ -10,6 +9,10 @@ function self.start()
     StartDataManager()
     InitializeUI()
     InitCam()
+    
+    task.wait()
+    
+    game:GetService("StarterGui"):SetCore("ResetButtonCallback", false)
 end
 
 function StartMinorTasksHandler()
