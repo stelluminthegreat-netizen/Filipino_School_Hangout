@@ -44,7 +44,7 @@ end
 function class:Init()
 	-- Reposition UIs to their closed position
 	if self.Changes then 
-		self:Animate(self.Changes.CloseChanges)
+		self:Animate(self.Changes.CloseChanges, 0)
 	end
 	if self.EventNames then
 		for _, eventName in self.EventNames do
@@ -96,6 +96,7 @@ end
 function Open(UI_Obj)
 	if UI_Obj.Debounce.Opening == true then return end
 	UI_Obj.Debounce.Opening = true
+	if UI_Obj.Delays then task.wait(UI_Obj.Delays.OpeningUIs or 0) end
 	for _, folderName in UI_Obj.OpenUIs do
 		local folder = UIsPath[folderName]
 		if not folder then continue end
@@ -131,6 +132,7 @@ function Close(UI_Obj)
 	-- Fire their Closed events
 	if UI_Obj.Debounce.Closing == true then return end
 	UI_Obj.Debounce.Closing = true
+	if UI_Obj.Delays then task.wait(UI_Obj.Delays.CloseUIs or 0) end
 	for _, uiName in UI_Obj.CloseUIs do
 		local ui = class.UIs[uiName]
 		if not ui then continue end
@@ -144,7 +146,7 @@ end
 function  class:Opened()
 	if self.Debounce.Opened == true then return end
 	self.Debounce.Opened = true
-	task.wait(self.Delay)
+	task.wait(self.Delay or 0)
 	if self.Delays then task.wait(self.Delays.Open) end
 	local animEvent = self.Events.Animate
 	if animEvent then animEvent:Fire(self.Changes.OpenChanges) end
@@ -176,8 +178,6 @@ function class:OnPlayClicked()
 	local conn 
 	conn = self.UI.MouseButton1Down:Connect(function()
 		if not self.Connections.OnPlayClicked then self.Connections["OnPlayClicked"] = conn end
-		local event = game.ReplicatedStorage.Remotes.Events.PlayBtnClicked
-		event:FireServer()
 
 		local player = game.Players.LocalPlayer
 		local Player = shared.Player
@@ -188,7 +188,7 @@ function class:OnPlayClicked()
 		player.CharacterAdded:Wait()
 		local HRP = player.Character:WaitForChild("HumanoidRootPart")
 		local cam = workspace.CurrentCamera
-		task.wait(2)
+		task.wait(0.1)
 		local at = HRP.Position + Vector3.new(0, 3, 10)
 		local lookAt = HRP.Position
 		local tween = Camera.TweenedCFrameModification(cam, CFrame.lookAt(at, lookAt), 2)
@@ -210,12 +210,21 @@ function class:OnMainMenuClicked()
 		local playerObj = Player.Players[player.Name]
 		playerObj.Status.InMainMenu = false
 		playerObj.Events.Changed:Fire("GameState")
+
+		
+		local cam = game.Workspace.CurrentCamera
+		cam.CameraType = Enum.CameraType.Scriptable
+		local lookAt = Vector3.new(0, 20, 0)
+		local at = Vector3.new(0, 30, 0)
+		local tween = Camera.TweenedCFrameModification(cam, CFrame.lookAt(at, lookAt), 2)
+		tween.Completed:Wait()
+		tween:Destroy()
 	end)
 end
 
-function  class:Animate(changes: table)
+function  class:Animate(changes: table, duration)
 	if self.UI.Name == "SettingsFrame" then print(require(UI_Attributes.SettingsFrame)) end
-	local tween = customTween.ApplyProperties(self.UI, changes, self.AnimDuration)
+	local tween = customTween.ApplyProperties(self.UI, changes, duration or self.AnimDuration)
 	self.Events["AnimCompleted"] = tween.Completed
 	return tween
 end
