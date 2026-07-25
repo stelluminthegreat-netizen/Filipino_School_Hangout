@@ -10,16 +10,23 @@ return
         [7] = "RoleSelectorContainer",
         [8] = "Overlay"
     },
+    ["OpenUIs"] = {
+        [1] = "MainMenuBtn",
+        -- [2] = "InGameSettingsBtn",
+        -- [3] = "InGameShopBtn"
+    },
     ["Funcs"] = {
         [1] = "Close",
-        [2] = "OnPlayClicked"
+        [2] = "Open",
+        [3] = "OnPlayClicked"
     },
     ["EventNames"] = {
         ["Closed"] = "Closed",
         ["Opened"] = "Opened",
     },
-       ["Debounce"] = {
-        ["Status"] = "Closing"
+    ["Debounce"] = {
+        ["Closing"] = false,
+        ["Opening"] = false
     },
     ["Events"] = {
 

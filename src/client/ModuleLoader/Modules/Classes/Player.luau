@@ -30,7 +30,7 @@ function class:GameStateListener()
 	conn = self.Events.Changed:Connect(function(params, changes)
 		local conns = self.Connections
 		if not conns["GameStateListener"] then conns["GameStateListener"] = conn end
-		if changes ~= "GameState" then print(changes) return end
+		if changes ~= "GameState" then return end
 		local GameStateChanged = game.ReplicatedStorage.Remotes.Events.GameStateChanged
 		GameStateChanged:FireServer()
 	end)

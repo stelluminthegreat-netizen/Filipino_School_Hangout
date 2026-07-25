@@ -94,8 +94,8 @@ end
 
 ------------------------------ PRIVATE FUNCTIONS ------------------------------
 function Open(UI_Obj)
-	if UI_Obj.Debounce.Status ~= "Opening" then return end
-	print(UI_Obj.Debounce.Status)
+	if UI_Obj.Debounce.Opening == true then return end
+	UI_Obj.Debounce.Opening = true
 	for _, folderName in UI_Obj.OpenUIs do
 		local folder = UIsPath[folderName]
 		if not folder then continue end
@@ -107,7 +107,7 @@ function Open(UI_Obj)
 		local Prios = {}
 		for _, childUI in folder:GetChildren() do
 			if class.UIs[childUI.Name] then return end
-			local attributes = UI_Attributes[childUI.Name]
+			local attributes = require(UI_Attributes[childUI.Name])
 			local PrioNum = attributes.Prios.OpenPrio
 			UI_Obj.Delay = folder:GetAttribute("Delay")
 			if not Prios[PrioNum] then Prios[PrioNum] = {} end
@@ -122,21 +122,22 @@ function Open(UI_Obj)
 		end
 	end
 	task.wait(0.5)
-	UI_Obj.Debounce.Status = "Closing"
+	UI_Obj.Debounce.Opening = false
 end 
 
 function Close(UI_Obj)
 	-- Loop through self.CloseUIs
 	-- Find each UI in class.UIs
 	-- Fire their Closed events
-	if UI_Obj.Debounce.Status ~= "Closing" then return end
+	if UI_Obj.Debounce.Closing == true then return end
+	UI_Obj.Debounce.Closing = true
 	for _, uiName in UI_Obj.CloseUIs do
 		local ui = class.UIs[uiName]
 		if not ui then continue end
 		ui.Events.Closed:Fire()
 	end
 	task.wait(0.65)
-	UI_Obj.Debounce.Status = "Opening"
+	UI_Obj.Debounce.Closing = true
 end
 
 ------------------------------ EVENT HANDLERS ------------------------------
@@ -179,6 +180,11 @@ function class:OnPlayClicked()
 		event:FireServer()
 
 		local player = game.Players.LocalPlayer
+		local Player = shared.Player
+		local playerObj = Player.Players[player.Name]
+		playerObj.Status.InMainMenu = false
+		playerObj.Events.Changed:Fire("GameState")
+
 		player.CharacterAdded:Wait()
 		local HRP = player.Character:WaitForChild("HumanoidRootPart")
 		local cam = workspace.CurrentCamera
@@ -190,11 +196,20 @@ function class:OnPlayClicked()
 		cam.CameraType = Enum.CameraType.Custom
 		cam.CameraSubject = HRP
 
+		conn:Disconnect()
+	end)
+end
+
+function class:OnMainMenuClicked()
+	if self.Connections.OnMainMenuClicked then return end
+	local conn
+	conn = self.UI.MouseButton1Down:Connect(function()
+		if not self.Connections.OnMainMenuClicked then self.Connections["OnMainMenuClicked"] = conn end
+		local player = game.Players.LocalPlayer
 		local Player = shared.Player
 		local playerObj = Player.Players[player.Name]
 		playerObj.Status.InMainMenu = false
 		playerObj.Events.Changed:Fire("GameState")
-		conn:Disconnect()
 	end)
 end
 
