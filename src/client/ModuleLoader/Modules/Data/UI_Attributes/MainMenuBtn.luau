@@ -26,10 +26,10 @@ return
     },
     ["Changes"] = {
         ["OpenChanges"] = {
-            ["Position"] = UDim2.fromScale(0.04, 0.62)
+            ["Position"] = UDim2.fromScale(0.04, 0.34)
         },
         ["CloseChanges"] = {
-            ["Position"] = UDim2.fromScale(-0.04, 0.62)
+            ["Position"] = UDim2.fromScale(-0.04, 0.34)
         }
     },
     ["Debounce"] = {
@@ -48,6 +48,12 @@ return
     },
     ["TargetFolders"] = {
 
+    },
+    ["Delays"] = {
+        ["Open"] = 2,
+        ["Close"] = 0,
+        ["OpeningUIs"] = 2,
+        ["ClosingUIs"] = 0
     },
     ["Parent"] = "ScreenGui",
     ["AnimDuration"] = 0.5
