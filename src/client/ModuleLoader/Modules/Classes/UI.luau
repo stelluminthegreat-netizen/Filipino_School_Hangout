@@ -222,6 +222,24 @@ function class:OnMainMenuClicked()
 	end)
 end
 
+function class:OnMainMenuMouseHover()
+	local inConn 
+	local outConn
+	local conns = self.Connections
+	local ui = self.UI
+	task.wait()
+	local text = ui.Parent.MainMenuTextOnHover
+	text.Position = UDim2.fromScale(-1, 0)
+	inConn = ui.MouseEnter:Connect(function()
+		if not conns["MouseEntered"] then conns["MouseEntered"] = inConn end
+		customTween.ApplyProperties(text, {Position = UDim2.fromScale(0.2, 0)}, 0.5)
+	end)
+	outConn = ui.MouseLeave:Connect(function()
+		if not conns["MouseExited"] then conns["MouseExited"] = outConn end
+		customTween.ApplyProperties(text, {Position = UDim2.fromScale(-1, 0)}, 0.5)
+	end)
+end
+
 function  class:Animate(changes: table, duration)
 	if self.UI.Name == "SettingsFrame" then print(require(UI_Attributes.SettingsFrame)) end
 	local tween = customTween.ApplyProperties(self.UI, changes, duration or self.AnimDuration)

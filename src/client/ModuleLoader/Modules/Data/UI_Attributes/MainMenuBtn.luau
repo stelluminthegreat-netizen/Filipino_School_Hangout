@@ -3,12 +3,13 @@ return
     ["Funcs"] = {
         [1] = "Open",
         [2] = "Close",
-        [3] = "OnMainMenuClicked"
+        [3] = "OnMainMenuClicked",
+        [4] = "OnMainMenuMouseHover"
     },
     ["EventNames"] = {
         [1] = "Opened",
         [2] = "Closed",
-        [3] = "Animate"
+        -- [3] = "Animate"
     },
     ["OpenUIs"] = {
         [1] = "MainMenuUserProfile",
@@ -20,17 +21,9 @@ return
         [7] = "RoleSelectorContainer",
     },
     ["CloseUIs"] = {
-        [1] = "MainMenuBtn",
-        [2] = "InGameSettingsBtn",
-        [3] = "InGameShopBtn"
-    },
-    ["Changes"] = {
-        ["OpenChanges"] = {
-            ["Position"] = UDim2.fromScale(0.04, 0.34)
-        },
-        ["CloseChanges"] = {
-            ["Position"] = UDim2.fromScale(-0.04, 0.34)
-        }
+        [1] = "MainMenuFrame",
+        -- [2] = "InGameSettingsBtn",
+        -- [3] = "InGameShopBtn"
     },
     ["Debounce"] = {
         ["Opened"] = false,
@@ -43,7 +36,7 @@ return
 
     },
     ["Prios"] = {
-        ["OpenPrio"] = 1,
+        ["OpenPrio"] = 2,
         ["ClosePrio"] = 1
     },
     ["TargetFolders"] = {
@@ -55,6 +48,6 @@ return
         ["OpeningUIs"] = 2,
         ["ClosingUIs"] = 0
     },
-    ["Parent"] = "ScreenGui",
+    ["Parent"] = "MainMenuFrame",
     ["AnimDuration"] = 0.5
 }

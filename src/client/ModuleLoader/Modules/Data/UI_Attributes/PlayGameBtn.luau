@@ -11,7 +11,7 @@ return
         [8] = "Overlay"
     },
     ["OpenUIs"] = {
-        [1] = "MainMenuBtn",
+        [1] = "MainMenuFrame",
         -- [2] = "InGameSettingsBtn",
         -- [3] = "InGameShopBtn"
     },
