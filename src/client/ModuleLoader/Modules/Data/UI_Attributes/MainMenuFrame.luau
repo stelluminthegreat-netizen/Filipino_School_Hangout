@@ -30,6 +30,12 @@ return
     ["Children"] = {
 
     },
+    ["Delays"] = {
+        ["Open"] = 3,
+        ["Close"] = 0,
+        ["OpeningUIs"] = 3,
+        ["ClosingUIs"] = 0
+    },
     ["Parent"] = "ScreenGui",
     ["AnimDuration"] = 0.5
 }
