@@ -4,7 +4,7 @@ return
         [1] = "Open",
         [2] = "Close",
         [3] = "OnMainMenuClicked",
-        [4] = "OnMainMenuMouseHover"
+        [4] = "ShowTextOnMouseHover"
     },
     ["EventNames"] = {
         [1] = "Opened",
@@ -48,6 +48,7 @@ return
         ["OpeningUIs"] = 2,
         ["ClosingUIs"] = 0
     },
+    ["ShowTextOnHover"] = "MainMenuTextOnHover",
     ["Parent"] = "MainMenuFrame",
     ["AnimDuration"] = 0.5
 }
