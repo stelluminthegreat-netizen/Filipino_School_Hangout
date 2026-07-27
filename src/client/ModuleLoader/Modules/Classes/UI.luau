@@ -1,3 +1,4 @@
+local LogReporterService = game:GetService("LogReporterService")
 local TextService = game:GetService("TextService")
 local class = {}
 class.UIs = {}
@@ -222,21 +223,20 @@ function class:OnMainMenuClicked()
 	end)
 end
 
-function class:OnMainMenuMouseHover()
+function class:ShowTextOnMouseHover()
 	local inConn 
 	local outConn
 	local conns = self.Connections
 	local ui = self.UI
 	task.wait()
-	local text = ui.Parent.MainMenuTextOnHover
-	text.Position = UDim2.fromScale(-1, 0)
+	local text = class.UIs[self.ShowTextOnHover] -- The UI Object of the Text that will show upon mouse hover.
 	inConn = ui.MouseEnter:Connect(function()
 		if not conns["MouseEntered"] then conns["MouseEntered"] = inConn end
-		customTween.ApplyProperties(text, {Position = UDim2.fromScale(0.2, 0)}, 0.5)
+		customTween.ApplyProperties(text.UI, text.Changes.OpenChanges, 0.5)
 	end)
 	outConn = ui.MouseLeave:Connect(function()
 		if not conns["MouseExited"] then conns["MouseExited"] = outConn end
-		customTween.ApplyProperties(text, {Position = UDim2.fromScale(-1, 0)}, 0.5)
+		customTween.ApplyProperties(text.UI, text.Changes.CloseChanges, 0.5)
 	end)
 end
 
