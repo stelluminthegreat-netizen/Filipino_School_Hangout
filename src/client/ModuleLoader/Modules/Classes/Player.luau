@@ -19,7 +19,7 @@ function class:Init()
 		self.Events[name] = event
 	end
 	
-	for _, name in self.Funcs do
+	for _, name in self.FrameWorkFuncs do
 		if not self[name] then continue end
 		self[name](self)
 	end

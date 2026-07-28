@@ -8,7 +8,7 @@ return {
     ["Connections"] = {
 
     },
-    ["Funcs"] = {
+    ["FrameWorkFuncs"] = {
         [1] = "GameStateListener"
     },
     ["Status"] = {
