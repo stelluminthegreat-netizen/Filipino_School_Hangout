@@ -1,6 +1,6 @@
 return 
 {
-    ["Funcs"] = {
+    ["FrameWorkFuncs"] = {
         [1] = "Open",
         [2] = "Close",
         [3] = "OnMainMenuClicked",
@@ -41,12 +41,6 @@ return
     },
     ["TargetFolders"] = {
 
-    },
-    ["Delays"] = {
-        ["Open"] = 2,
-        ["Close"] = 0,
-        ["OpeningUIs"] = 2,
-        ["ClosingUIs"] = 0
     },
     ["ShowTextOnHover"] = "MainMenuTextOnHover",
     ["Parent"] = "MainMenuFrame",

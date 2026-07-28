@@ -15,7 +15,7 @@ return
         -- [2] = "InGameSettingsBtn",
         -- [3] = "InGameShopBtn"
     },
-    ["Funcs"] = {
+    ["FrameWorkFuncs"] = {
         [1] = "Close",
         [2] = "Open",
         [3] = "OnPlayClicked"
