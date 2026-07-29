@@ -3,13 +3,23 @@ local TextService = game:GetService("TextService")
 local class = {}
 class.UIs = {}
 local UI_Attributes = script.Parent.Parent.Data.UI_Attributes
+local GameFuncs = require(script.Parent.Parent.Data.GameUIFuncs)
 local UIsPath = game.ReplicatedStorage.UI_Folders
 local customTween = require(game.ReplicatedStorage.Shared.Libraries.CustomTween)
 local Table = require(game.ReplicatedStorage.Shared.Libraries.Table)
 local Camera = require(game.ReplicatedStorage.Shared.Libraries.Camera)
 class.__index = class
 
-function class.new(UI: ui, rootUI: string)
+local necesseties = {
+	["UI_Attributes"] = UI_Attributes,
+	["GameFuncs"] = GameFuncs,
+	["UIsPath"] = UIsPath,
+	["CustomTween"] = customTween,
+	["Table"] = Table,
+	["Camera"] = Camera
+}
+
+function class.new(UI: ui, rootUI: string) -- Framework
 	local self = setmetatable(Table.DeepClone(require(UI_Attributes[UI.Name])), class)
 	self.UI = UI:Clone()
 	class.UIs[self.UI.Name] = self
@@ -18,7 +28,7 @@ function class.new(UI: ui, rootUI: string)
 	return self
 end
 
-function class.OpenInitialUIs(UIs: table)
+function class.OpenInitialUIs(UIs: table) -- Framework
 	task.wait(0.5)
 	for _, folder in UIs do if class.UIs[folder.Name] then return end end -- !! NEVER REMOVE !! Check before opening 
 	for _, folder in UIs do
@@ -42,7 +52,7 @@ function class.OpenInitialUIs(UIs: table)
 	task.wait(0.5)
 end
 
-function class:Init()
+function class:Init() -- Framework
 	-- Reposition UIs to their closed position
 	if self.Changes then 
 		self:Animate(self.Changes.CloseChanges, 0)
@@ -57,16 +67,29 @@ function class:Init()
 		for _, funcName in self.FrameWorkFuncs do
 			local func = self[funcName]
 			if not func then continue end
-			shared.Threads:Spawn(function() func(self) end)
+			shared.Threads:Spawn(function() func(self, necesseties) end)
 		end
 	end
+	if self.GameFuncs then
+		for _, funcName in self.GameFuncs do
+			local func = GameFuncs[funcName]
+			if not func then continue end
+			shared.Threads:Spawn(function() func(self, necesseties) end)
+		end
+	end
+	if self.Funcs then 
+		for _, func in self.Funcs do
+			shared.Threads:Spawn(function() func(self, necesseties) end)
+		end
+	end
+	
 	self.UI.Parent = game.Players.LocalPlayer.PlayerGui:FindFirstChild(self.Parent, true)
 	local UI_ObjParent = class.UIs[self.Parent]
 	if UI_ObjParent then UI_ObjParent.Children[self.UI.Name] = self  end
 	self.Events.Opened:Fire()
 end
 
-function class:Destroy()
+function class:Destroy() -- Framework
 	class.UIs[self.UI.Name] = nil
 	for _, connection in self.Connections do
 		connection:Disconnect()
@@ -77,7 +100,7 @@ end
 
 ------------------------------ GENERAL METHODS ------------------------------
 
-function class:Open()
+function class:Open() -- Framework
 	local eventName = "OpenUIs"
 	self.Events[eventName] = self.UI.MouseButton1Down
 	self.Connections[eventName] = self.Events[eventName]:Connect(function()
@@ -85,7 +108,7 @@ function class:Open()
 	end)
 end
 
-function class:Close()
+function class:Close() -- Framework
 	local eventName = "CloseUIs"
 	self.Events[eventName] = self.UI.MouseButton1Down
 	self.Connections[eventName] = self.Events[eventName]:Connect(function()
@@ -94,7 +117,7 @@ function class:Close()
 end
 
 ------------------------------ PRIVATE FUNCTIONS ------------------------------
-function Open(UI_Obj)
+function Open(UI_Obj) -- Framework
 	if UI_Obj.Debounce.Opening == true then return end
 	UI_Obj.Debounce.Opening = true
 	if UI_Obj.Delays then task.wait(UI_Obj.Delays.OpeningUIs or 0) end
@@ -127,7 +150,7 @@ function Open(UI_Obj)
 	UI_Obj.Debounce.Opening = false
 end 
 
-function Close(UI_Obj)
+function Close(UI_Obj) -- Framework
 	-- Loop through self.CloseUIs
 	-- Find each UI in class.UIs
 	-- Fire their Closed events
@@ -144,7 +167,7 @@ function Close(UI_Obj)
 end
 
 ------------------------------ EVENT HANDLERS ------------------------------
-function  class:Opened()
+function  class:Opened() -- Framework
 	if self.Debounce.Opened == true then return end
 	self.Debounce.Opened = true
 	task.wait(self.Delay or 0)
@@ -153,7 +176,7 @@ function  class:Opened()
 	if animEvent then animEvent:Fire(self.Changes.OpenChanges) end
 end
 
-function class:Closed()
+function class:Closed() -- Framework
 	if self.Debounce.Closed == true then return end
 	self.Debounce.Closed = true
 	task.wait(self.Delay or 0)
@@ -174,56 +197,7 @@ function class:Closed()
 	return 
 end
 
-function class:OnPlayClicked()
-	if self.Connections.OnPlayClicked then warn("OnPlayClicked connection exists", self.Connections) return end
-	local conn 
-	conn = self.UI.MouseButton1Down:Connect(function()
-		if not self.Connections.OnPlayClicked then self.Connections["OnPlayClicked"] = conn end
-
-		local player = game.Players.LocalPlayer
-		local Player = shared.Player
-		local playerObj = Player.Players[player.Name]
-		playerObj.Status.InMainMenu = false
-		playerObj.Events.Changed:Fire("GameState")
-
-		player.CharacterAdded:Wait()
-		local HRP = player.Character:WaitForChild("HumanoidRootPart")
-		local cam = workspace.CurrentCamera
-		task.wait(0.1)
-		local at = HRP.Position + Vector3.new(0, 3, 10)
-		local lookAt = HRP.Position
-		local tween = Camera.TweenedCFrameModification(cam, CFrame.lookAt(at, lookAt), 2)
-		tween.Completed:Wait()
-		cam.CameraType = Enum.CameraType.Custom
-		cam.CameraSubject = HRP
-
-		conn:Disconnect()
-	end)
-end
-
-function class:OnMainMenuClicked()
-	if self.Connections.OnMainMenuClicked then return end
-	local conn
-	conn = self.UI.MouseButton1Down:Connect(function()
-		if not self.Connections.OnMainMenuClicked then self.Connections["OnMainMenuClicked"] = conn end
-		local player = game.Players.LocalPlayer
-		local Player = shared.Player
-		local playerObj = Player.Players[player.Name]
-		playerObj.Status.InMainMenu = false
-		playerObj.Events.Changed:Fire("GameState")
-
-		
-		local cam = game.Workspace.CurrentCamera
-		cam.CameraType = Enum.CameraType.Scriptable
-		local lookAt = Vector3.new(0, 20, 0)
-		local at = Vector3.new(0, 30, 0)
-		local tween = Camera.TweenedCFrameModification(cam, CFrame.lookAt(at, lookAt), 2)
-		tween.Completed:Wait()
-		tween:Destroy()
-	end)
-end
-
-function class:ShowTextOnMouseHover()
+function class:ShowTextOnMouseHover() -- Framework 
 	local inConn 
 	local outConn
 	local conns = self.Connections
@@ -240,7 +214,7 @@ function class:ShowTextOnMouseHover()
 	end)
 end
 
-function  class:Animate(changes: table, duration)
+function  class:Animate(changes: table, duration) -- Framework
 	if self.UI.Name == "SettingsFrame" then print(require(UI_Attributes.SettingsFrame)) end
 	local tween = customTween.ApplyProperties(self.UI, changes, duration or self.AnimDuration)
 	self.Events["AnimCompleted"] = tween.Completed

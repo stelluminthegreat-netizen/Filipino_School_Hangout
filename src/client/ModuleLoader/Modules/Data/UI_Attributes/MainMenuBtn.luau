@@ -6,6 +6,32 @@ return
         [3] = "OnMainMenuClicked",
         [4] = "ShowTextOnMouseHover"
     },
+    ["GameFuncs"] = {
+
+    },
+    ["Funcs"] = {
+        ["OnMainMenuClicked"] = function(self, necesseties)
+            if self.Connections.OnMainMenuClicked then return end
+            local conn
+            conn = self.UI.MouseButton1Down:Connect(function()
+            if not self.Connections.OnMainMenuClicked then self.Connections["OnMainMenuClicked"] = conn end
+            local player = game.Players.LocalPlayer
+            local Player = shared.Player
+            local playerObj = Player.Players[player.Name]
+            playerObj.Status.InMainMenu = false
+            playerObj.Events.Changed:Fire("GameState")
+
+            
+            local cam = game.Workspace.CurrentCamera
+            cam.CameraType = Enum.CameraType.Scriptable
+            local lookAt = Vector3.new(0, 20, 0)
+            local at = Vector3.new(0, 30, 0)
+            local tween = necesseties.Camera.TweenedCFrameModification(cam, CFrame.lookAt(at, lookAt), 2)
+            tween.Completed:Wait()
+            tween:Destroy()
+	        end)
+        end
+    },
     ["EventNames"] = {
         [1] = "Opened",
         [2] = "Closed",
