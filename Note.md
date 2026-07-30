@@ -1,9 +1,9 @@
 Framework files to be pushed to template checklist
 
 -- CLIENT
-[X] DataManager :: src\client\Data\DataManager.luau
-[X] Player :: src\client\ModuleLoader\Modules\Classes\Player.luau
-[X] UI :: src\client\ModuleLoader\Modules\Classes\UI.luau
+[/] DataManager :: src\client\Data\DataManager.luau
+[/] Player :: src\client\ModuleLoader\Modules\Classes\Player.luau
+[/] UI :: src\client\ModuleLoader\Modules\Classes\UI.luau
 
 -- SERVER
 [X] DataInit :: src\server\Data\DataInit.server.luau
