@@ -13,3 +13,5 @@ Framework files to be pushed to template checklist
 
 [X] Character :: src\server\ModuleLoader\Modules\Classes\Character.luau
 [X] Player :: src\server\ModuleLoader\Modules\Classes\Player.luau
+
+-- SHARED
