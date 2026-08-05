@@ -1,5 +1,3 @@
-local LogReporterService = game:GetService("LogReporterService")
-local TextService = game:GetService("TextService")
 local class = {}
 class.UIs = {}
 local UI_Attributes = script.Parent.Parent.Data.UI_Attributes
@@ -55,6 +53,13 @@ function class:Init()
 	end
 	if self.FrameWorkFuncs then
 		for _, funcName in self.FrameWorkFuncs do
+			local func = self[funcName]
+			if not func then continue end
+			shared.Threads:Spawn(function() func(self) end)
+		end
+	end
+	if self.GameFuncs then
+		for _, funcName in self.GameFuncs do
 			local func = self[funcName]
 			if not func then continue end
 			shared.Threads:Spawn(function() func(self) end)
