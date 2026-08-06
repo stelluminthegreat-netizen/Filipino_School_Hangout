@@ -1,10 +1,13 @@
+local StarterPlayer = game:GetService("StarterPlayer")
 local class = {}
 class.UIs = {}
 local UI_Attributes = script.Parent.Parent.Data.UI_Attributes
 local UIsPath = game.ReplicatedStorage.UI_Folders
+local UIGameFuncs = require(StarterPlayer.StarterPlayerScripts.Client.ModuleLoader.Modules.Data.UIGameFuncs)
 local customTween = require(game.ReplicatedStorage.Shared.Libraries.CustomTween)
 local Table = require(game.ReplicatedStorage.Shared.Libraries.Table)
 local Camera = require(game.ReplicatedStorage.Shared.Libraries.Camera)
+
 class.__index = class
 
 function class.new(UI: ui, rootUI: string)
@@ -60,7 +63,13 @@ function class:Init()
 	end
 	if self.GameFuncs then
 		for _, funcName in self.GameFuncs do
-			local func = self[funcName]
+			local func = UIGameFuncs[funcName]
+			if not func then continue end
+			shared.Threads:Spawn(function() func(self) end)
+		end
+	end
+	if self.Funcs then 
+		for _, func in self.Funcs do
 			if not func then continue end
 			shared.Threads:Spawn(function() func(self) end)
 		end

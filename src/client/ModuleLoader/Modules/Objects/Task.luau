@@ -49,6 +49,7 @@ function Loop()
 	if currentTick < current_tick.Value then currentTick = current_tick end
 	if self.Tick >= currentTick then return end
 	while self.Tick < currentTick do
+		task.wait()
 		self.Tick += 1
 		self.OnTick:Fire(self.Tick)
 		local taskList = taskLists[self.Tick]
