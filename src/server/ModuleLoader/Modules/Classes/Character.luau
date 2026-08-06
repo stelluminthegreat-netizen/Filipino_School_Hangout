@@ -24,8 +24,21 @@ function class:Init()
 		if not self[name] then continue end
 		self[name](self)
 	end
+
 	self:WaitForPlayer()
+	if self.Player.Role == "Student" then
+		self.Character.Shirt.ShirtTemplate = "rbxassetid://9647550235"
+		self.Character.Pants.PantsTemplate = "rbxassetid://18616958266"
+	elseif self.Player.Role == "Teacher" then
+		self.Character.Shirt.ShirtTemplate = "rbxassetid://6019851016"
+		self.Character.Pants.PantsTemplate = "rbxassetid://5477514480"
+	elseif self.Player.Role == "Principal" then
+		self.Character.Shirt.ShirtTemplate = "rbxassetid://5940381983"
+		self.Character.Pants.PantsTemplate = "rbxassetid://910838673"
+	end
 	self:Teleport(self.Player.SpawnPoint)
+
+
 end
 
 function class:IncrementHealth(value: number)

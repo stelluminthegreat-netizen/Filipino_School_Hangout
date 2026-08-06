@@ -1,5 +1,7 @@
 function OnArrowClicked(self)
     self.Events.ArrowClicked = shared.Event.new()
+    local event = game.ReplicatedStorage.Remotes.Events.RoleSelectionChanged
+    event:FireServer("Student")
     local conn
     conn = self.Events.ArrowClicked:Connect(function(_, direction)
         if not self.Connections[conn] then self.Connections[conn] = conn end
@@ -32,7 +34,7 @@ function OnArrowClicked(self)
             self.ToAnimate[selectionObj.UI.Name] = selectionObj
             self.ToAnimate[prevSelectionObj.UI.Name] = prevSelectionObj
         end
-
+        event:FireServer(self.CurrentSelection)
         Animate(self)
     end)
 end
@@ -43,7 +45,6 @@ function Animate(self)
         local frame = UIObject.UI
         local roleImage = frame.RoleCharacterDesign
         local roleName = frame.RoleName
-        
         if UIObject.State == "Selected" then
             customtween.ApplyProperties(frame, {Transparency = 0.4, Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.65,0.65)}, 0.5)
             customtween.ApplyProperties(roleImage, {ImageTransparency = 0}, 0.5)

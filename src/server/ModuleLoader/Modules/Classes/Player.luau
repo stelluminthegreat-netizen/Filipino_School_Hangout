@@ -40,10 +40,6 @@ function class:Init()
 	end
 end
 
-function class:SwtichClass(name: string)
-	self.ClassName = name
-end
-
 function class.WaitForPlayer(plr_name)
 	local player
 	while not player do
@@ -79,6 +75,17 @@ function class:OnGameStateChanged()
 			self:SetSpawn(CFrame.new(Vector3.new(5, 15, 0)))
 		end
 		print("Game state:", self.Status.GameState)
+	end)
+end
+
+function class:RoleSelectionChanged()
+	self.Events.RoleSelectionChanged = game.ReplicatedStorage.Remotes.Events.RoleSelectionChanged
+	local conn 
+	conn = self.Events.RoleSelectionChanged.OnServerEvent:Connect(function(plr, selection)
+		if not self.Connections["RoleSelectionChanged"] then self.Connections["RoleSelectionChanged"] = conn end
+		if plr ~= self.Player then return end
+		self.Role = selection
+		print(self.Role)
 	end)
 end
 
