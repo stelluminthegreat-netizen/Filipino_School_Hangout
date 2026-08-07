@@ -1,5 +1,6 @@
 local TemplatePath = script.Parent.Parent.Data.Player.PlayerTemplate
 local Table = require(game.ReplicatedStorage.Shared.Libraries.Table)
+local DataManager = require(script.Parent.Parent.Parent.Parent.Data.DataManager)
 
 local class = {}
 class.__index = class
@@ -10,6 +11,8 @@ function class.new(plr)
 	self.Player = plr
 	class.Players[plr.Name] = self
 	shared.Threads:Spawn(function() self:Init() end)
+	DataManager.Start()
+	DataManager.RequestData(plr)
 	return self
 end
 

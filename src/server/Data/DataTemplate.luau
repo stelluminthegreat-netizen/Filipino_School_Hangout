@@ -1,4 +1,6 @@
 return {
     ["Joins"] = 0,
-    ["Passes"] = {}
+    ["Passes"] = {},
+    ["Cash"] = 0,
+    ["Level"] = 1
 }
